@@ -1,0 +1,168 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Launch Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Launch SimpleFuzzer",
+            "request": "launch",
+            "mainClass": "org.fastfilter.SimpleFuzzer",
+            "projectName": "fastfilter"
+        },
+        {
+            "type": "java",
+            "name": "Launch TestAllFilters",
+            "request": "launch",
+            "mainClass": "org.fastfilter.TestAllFilters",
+            "projectName": "fastfilter"
+        },
+        {
+            "type": "java",
+            "name": "Launch TestXorBloom",
+            "request": "launch",
+            "mainClass": "org.fastfilter.TestXorBloom",
+            "projectName": "fastfilter"
+        },
+        {
+            "type": "java",
+            "name": "Launch AnalyzeKeyGeneratorEffects",
+            "request": "launch",
+            "mainClass": "org.fastfilter.analysis.AnalyzeKeyGeneratorEffects",
+            "projectName": "fastfilter"
+        },
+        {
+            "type": "java",
+            "name": "Launch AnalyzeResults",
+            "request": "launch",
+            "mainClass": "org.fastfilter.analysis.AnalyzeResults",
+            "projectName": "fastfilter"
+        },
+        {
+            "type": "java",
+            "name": "Launch AnalyzeSpaceUsageResults",
+            "request": "launch",
+            "mainClass": "org.fastfilter.analysis.AnalyzeSpaceUsageResults",
+            "projectName": "fastfilter"
+        },
+        {
+            "type": "java",
+            "name": "Launch AnalyzeXorConstructionCacheMisses",
+            "request": "launch",
+            "mainClass": "org.fastfilter.analysis.AnalyzeXorConstructionCacheMisses",
+            "projectName": "fastfilter"
+        },
+        {
+            "type": "java",
+            "name": "Launch BitArrayTest",
+            "request": "launch",
+            "mainClass": "org.fastfilter.gcs.BitArrayTest",
+            "projectName": "fastfilter"
+        },
+        {
+            "type": "java",
+            "name": "Launch BitBufferTest",
+            "request": "launch",
+            "mainClass": "org.fastfilter.gcs.BitBufferTest",
+            "projectName": "fastfilter"
+        },
+        {
+            "type": "java",
+            "name": "Launch MonotoneListTest",
+            "request": "launch",
+            "mainClass": "org.fastfilter.gcs.MonotoneListTest",
+            "projectName": "fastfilter"
+        },
+        {
+            "type": "java",
+            "name": "Launch MonotoneListTest2",
+            "request": "launch",
+            "mainClass": "org.fastfilter.gcs.MonotoneListTest2",
+            "projectName": "fastfilter"
+        },
+        {
+            "type": "java",
+            "name": "Launch SortTest",
+            "request": "launch",
+            "mainClass": "org.fastfilter.gcs.SortTest",
+            "projectName": "fastfilter"
+        },
+        {
+            "type": "java",
+            "name": "Launch BuildFilterFile",
+            "request": "launch",
+            "mainClass": "org.fastfilter.tools.BuildFilterFile",
+            "projectName": "fastfilter"
+        },
+        {
+            "type": "java",
+            "name": "Launch PasswordLookup",
+            "request": "launch",
+            "mainClass": "org.fastfilter.tools.PasswordLookup",
+            "projectName": "fastfilter"
+        },
+        {
+            "type": "java",
+            "name": "Launch Profiler",
+            "request": "launch",
+            "mainClass": "org.fastfilter.utils.Profiler",
+            "projectName": "fastfilter"
+        },
+        {
+            "type": "java",
+            "name": "Launch RandomGenerator",
+            "request": "launch",
+            "mainClass": "org.fastfilter.utils.RandomGenerator",
+            "projectName": "fastfilter"
+        },
+        {
+            "type": "java",
+            "name": "Launch ProbabilityCFuse",
+            "request": "launch",
+            "mainClass": "org.fastfilter.xor.ProbabilityCFuse",
+            "projectName": "fastfilter"
+        },
+        {
+            "type": "java",
+            "name": "Launch ProbabilityCFuse2",
+            "request": "launch",
+            "mainClass": "org.fastfilter.xor.ProbabilityCFuse2",
+            "projectName": "fastfilter"
+        },
+        {
+            "type": "java",
+            "name": "Launch ProbabilityFuse",
+            "request": "launch",
+            "mainClass": "org.fastfilter.xor.ProbabilityFuse",
+            "projectName": "fastfilter"
+        },
+        {
+            "type": "java",
+            "name": "Launch ProbabilityOfMappingStep",
+            "request": "launch",
+            "mainClass": "org.fastfilter.xor.ProbabilityOfMappingStep",
+            "projectName": "fastfilter"
+        },
+        {
+            "type": "java",
+            "name": "Launch VisualPeeling",
+            "request": "launch",
+            "mainClass": "org.fastfilter.xor.VisualPeeling",
+            "projectName": "fastfilter"
+        },
+        {
+            "type": "java",
+            "name": "Launch Rank9Test",
+            "request": "launch",
+            "mainClass": "org.fastfilter.xorplus.Rank9Test",
+            "projectName": "fastfilter"
+        }
+    ]
+}
