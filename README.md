@@ -1,5 +1,5 @@
 # Fast Approximate Membership Filters in Java
-```diff
+
 [![Build Status](https://travis-ci.com/FastFilter/fastfilter_java.svg?branch=master)](https://travis-ci.com/FastFilter/fastfilter_java)
 
 The following filter types are currently implemented:
