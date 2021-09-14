@@ -1,10 +1,11 @@
 # Fast Approximate Membership Filters in Java
-
+```diff
 [![Build Status](https://travis-ci.com/FastFilter/fastfilter_java.svg?branch=master)](https://travis-ci.com/FastFilter/fastfilter_java)
 
 The following filter types are currently implemented:
 
 * Xor filter: 8 and 16 bit variants; needs less space than cuckoo filters, with faster lookup
+-* Xor filter 7 + Bloom filter: Same as the xor filter 8 but allows keys addition without having to rebuild
 * Xor+ filter: 8 and 16 bit variants; compressed xor filter
 * Xor binary fuse filter: 8 bit variant; needs less space than xor filters, with faster lookup
 * Cuckoo filter: 8 and 16 bit variants; uses cuckoo hashing to store fingerprints
@@ -19,6 +20,7 @@ The following additional types are implemented, but less tested:
 
 * Golomb Compressed Set (GCS): needs less space than cuckoo filters, but lookup is slow
 * Minimal Perfect Hash filter: needs less space than cuckoo filters, but lookup is slow
+
 
 ## Reference
 

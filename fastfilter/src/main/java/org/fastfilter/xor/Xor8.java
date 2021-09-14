@@ -16,7 +16,7 @@ import org.fastfilter.utils.Hash;
  */
 public class Xor8 implements Filter {
 
-    private static final int BITS_PER_FINGERPRINT = 7;
+    private static final int BITS_PER_FINGERPRINT = 8;
     private static final int HASHES = 3;
     private static final int FACTOR_TIMES_100 = 123;
     private final int size;

@@ -122,7 +122,8 @@ public class TestAllFilters {
             System.out.println();
         }
         */
-        int size = 10_500_000;  
+        //int size = 10_200_000;  
+        for (int size = 10_150_000; size <= 10_900_000; size += 100_000) {
             //int size2 = 60_000;
             System.out.println("size " + size);
             //testAll(size, true);
@@ -130,6 +131,7 @@ public class TestAllFilters {
             test(TestFilterType.XOR_8, size, test, true);
             //test2(TestFilterType.BLOOM, size2, test, true);
             System.out.println();
+         }
         //testAll(100_000_000, true);
     }
 

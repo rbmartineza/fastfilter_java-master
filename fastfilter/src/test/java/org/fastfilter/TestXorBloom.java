@@ -110,7 +110,7 @@ public class TestXorBloom {
             test(TestFilterType.XOR_BINARY_FUSE_8, size, 0, true);
         }
         */
-        for (int size2 = 50_000; size2 <= 1_000_000; size2 *= 2) {
+        for (int size2 = 150_000; size2 <= 850_000; size2 += 100_000) {
             int size1 = 10_000_000; // Keys for the Xor filter
             //int size2 = 500_000; // Keys for the Bloom filter
             int size = size1 + size2;  // Total keys to insert
