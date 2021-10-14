@@ -2,15 +2,13 @@ package org.fastfilter;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.IOException;
-
 //import org.fastfilter.Filter;
 //import org.fastfilter.TestFilterType;
 import org.fastfilter.utils.Hash;
 import org.fastfilter.utils.RandomGenerator;
-import org.fastfilter.xor.Xor8Bloom;
 import org.fastfilter.xor.Xor15Bloom;
-import org.junit.Test;
+import org.fastfilter.xor.Xor8Bloom;
+//import org.junit.Test;
 
 /*
 
@@ -87,7 +85,7 @@ This could be, for a LSM tree:
 
  */
 
-public class TestXorBloom {
+public class TestXorBloom15 {
 
     public static void main(String... args) {
         Hash.setSeed(1);
@@ -115,9 +113,8 @@ public class TestXorBloom {
         */
         //for (int test = 0; test <= 9; test += 1){
            // System.out.println("run:" + test);
-           //for (int size2 = 100_000; size2 <= 800_000; size2 += 100_000) {
-            for (int size2 = 300_000; size2 <= 350_000; size2 += 100_000) {
-                int size1 =65_000_000; // Keys for the Xor filter
+            for (int size2 =50_000; size2 <= 400_000; size2 += 50_000) {
+                int size1 = 10_000_000; // Keys for the Xor filter
                 //int size2 = 500_000; // Keys for the Bloom filter
                 int size = size1 + size2;  // Total keys to insert
                 System.out.println("size " + size);
@@ -136,29 +133,20 @@ public class TestXorBloom {
         testAll(100_000_000, true);
         */
     }
-
+/*
     @Test
     public void test() {
-        testAll(100000, true);
+        testAll(1000000, false);
     }
 
     private static void testAll(int len, boolean log) {
-       // for (TestFilterType type : TestFilterType.values()) {
-            //test(type, len, 0, log);
-            //test(len,len, 0, log);
-            for (int size2 = 0; size2 <= 4_000_000; size2 += 500_000) {
-                int size1 =100_000_000; // Keys for the Xor filter
-                //int size2 = 500_000; // Keys for the Bloom filter
-                int size = size1 + size2;  // Total keys to insert
-                System.out.println("size " + size);
-                int test = 0;
-                test(size1,size2, test, log);
-                //test2(TestFilterType.BLOOM, size2, test, true);
-                System.out.println();
-            }
+        for (TestFilterType type : TestFilterType.values()) {
+            test(type, len, 0, log);
             
-       // }
+        }
     }
+
+    */
 
     private static void test(int len1, int len2, int seed, boolean log) {
         int len = len1 + len2;
@@ -166,7 +154,6 @@ public class TestXorBloom {
         RandomGenerator.createRandomUniqueListFast(list, len + seed);
         long[] keys = new long[len1]; // keys for XOR filter
         long[] keysBloom = new long[len2]; // keys for Bloom filter
-        long[] keysAdded = new long[len]; // keys for Bloom filter
         long[] nonKeys = new long[len];
         // first half is keys, second half is non-keys
         for (int i = 0; i < len; i++) {
@@ -176,28 +163,34 @@ public class TestXorBloom {
         for (int i2 = 0; i2 < len1; i2++) {
             keys[i2] = list[i2];
         }
-        for (int i3 = len1; i3 < len; i3++) {
-            keysBloom[i3 - len1] = list[i3];
-        }
-        for (int i4 = 0; i4 < len; i4++) {
-            keysAdded[i4] = list[i4];
+        for (int i3 = len1 + 1; i3 < len; i3++) {
+            keysBloom[i3 - len1 - 1] = list[i3];
         }
         long time = System.nanoTime();
-        Filter f = Xor15Bloom.construct(keys, keysBloom);
+        Filter f = Xor8Bloom.construct(keys, keysBloom);
         time = System.nanoTime() - time;
         double nanosPerAdd = time / len;
         time = System.nanoTime();
         // each key in the set needs to be found
         
         int falseNegatives = 0;
-        for (int i = 0; i < len; i++) {
-            if (!f.mayContain(keysAdded[i])) {
+       
+        for (int i = 0; i < len1; i++) {
+            if (!f.mayContain(keys[i])) {
                 falseNegatives++;
                 // f.mayContain(keys[i]);
                 // throw new AssertionError();
             }
         }
-
+    
+        for (int i = 0; i < len2; i++) {
+            if (!f.mayContain(keysBloom[i])) {
+                falseNegatives++;
+                // f.mayContain(keys[i]);
+                // throw new AssertionError();
+            }
+        }
+       
         if (falseNegatives > 0) {
             throw new AssertionError("false negatives: " + falseNegatives);
         }
@@ -232,14 +225,14 @@ if (f.cardinality() != 0) {
             assertEquals(f.toString(), 0, f.cardinality());
         }
         if (log) {
-            System.out.println("Xor8Bloom" + " fpp: " + fpp +
-                   // " False positive count: " + falsePositives +
-                   // " size: " + len +
-                   // " bits/key: " + bitsPerKey +
-                   // " add ns/key: " + nanosPerAdd +
-                    " lookup_0%_ns/key: " + nanosPerLookupNoneInSet +
-                    " lookup_100%_ns/key: " + nanosPerLookupAllInSet +
-                    (nanosPerRemove < 0 ? "" : (" remove ns/key: " + nanosPerRemove)));
+            System.out.println("Xor8Bloom" + " fpp: " + fpp );
+//                    " False positive count: " + falsePositives +
+//                    " size: " + len +
+//                    " bits/key: " + bitsPerKey +
+//                    " add ns/key: " + nanosPerAdd +
+//                    " lookup 0% ns/key: " + nanosPerLookupNoneInSet +
+//                    " lookup 100% ns/key: " + nanosPerLookupAllInSet +
+//                    (nanosPerRemove < 0 ? "" : (" remove ns/key: " + nanosPerRemove)));
         }
     }
 

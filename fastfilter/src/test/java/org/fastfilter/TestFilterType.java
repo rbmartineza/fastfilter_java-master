@@ -13,7 +13,7 @@ import org.fastfilter.gcs.GolombCompressedSet2;
 import org.fastfilter.mphf.MPHFilter;
 import org.fastfilter.xor.Xor16;
 import org.fastfilter.xor.Xor8;
-import org.fastfilter.xor.Xor8Bloom;
+//import org.fastfilter.xor.Xor8Bloom;
 import org.fastfilter.xor.XorBinaryFuse8;
 import org.fastfilter.xor.XorSimple;
 import org.fastfilter.xor.XorSimple2;

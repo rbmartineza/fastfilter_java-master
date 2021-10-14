@@ -33,6 +33,7 @@
                     <failOnError>true</failOnError>
                     <showWarnings>true</showWarnings>
                     <showDeprecation>true</showDeprecation>
+                
                 </configuration>
             </plugin>
 
@@ -45,6 +46,7 @@
                     <skipTests>false</skipTests>
                     <forkCount>1</forkCount>
                     <reuseForks>false</reuseForks>
+                    <argLine>-Xmx8G</argLine>
                 </configuration>
             </plugin>
             <plugin>
@@ -52,15 +54,14 @@
                 <groupId>org.pitest</groupId>
                 <artifactId>pitest-maven</artifactId>
                 <version>1.4.3</version>
-                <configuration>
-                    <targetClasses>
-                        <param>org.fastfilter.gcs.Sort</param>
-                    </targetClasses>
-                    <targetTests>
-                        <param>org.fastfilter.gcs.SortTest</param>
-                    </targetTests>
-                </configuration>
+                
             </plugin>
+             <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>1.1</version>
+        
+        </plugin>
         </plugins>
     </build>
 

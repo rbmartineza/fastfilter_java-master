@@ -122,34 +122,45 @@ public class TestAllFilters {
             System.out.println();
         }
         */
-        //int size = 10_200_000;  
-        for (int size = 10_150_000; size <= 10_900_000; size += 100_000) {
-            //int size2 = 60_000;
-            System.out.println("size " + size);
-            //testAll(size, true);
-            int test = 0;
-            test(TestFilterType.XOR_8, size, test, true);
-            //test2(TestFilterType.BLOOM, size2, test, true);
-            System.out.println();
-         }
+        //int size = 10_200_000;
+        //for (int test = 0; test <= 40; test += 4){  
+          //  System.out.println("run:" + test);
+          // for (int size = 10_100_000; size <= 10_800_000; size += 100_000) {
+            for (int size = 70_000_000; size <= 70_100_000; size += 150_000) {
+           // for (int size = 11_000_000; size <= 12_000_000; size += 200_000) {
+                //int size2 = 60_000;
+                System.out.println("size " + size);
+                //testAll(size, true);
+                int test = 0;
+                test(TestFilterType.XOR_16, size, test, true);
+                //test2(TestFilterType.BLOOM, size2, test, true);
+                System.out.println();
+            }
+        //}
         //testAll(100_000_000, true);
     }
 
     @Test
     public void test() {
-        testAll(1000000, false);
+        for (int size_i = 100_000_000; size_i <= 104_000_000; size_i += 500_000) {
+        testAll(size_i, true);
+        }
     }
 
     private static void testAll(int len, boolean log) {
-        for (TestFilterType type : TestFilterType.values()) {
+       TestFilterType type = TestFilterType.XOR_16;
+       System.out.println("size " + len);
             test(type, len, 0, log);
+            //test(TestFilterType.XOR_8, len, 0, log);
+        
+
             
-        }
+       
     }
 
     private static void test(TestFilterType type, int len, int seed, boolean log) {
         long[] list = new long[len * 2];
-        RandomGenerator.createRandomUniqueListFast(list, len + seed);
+        RandomGenerator.createRandomUniqueListFast(list, 10_000_000 + seed);
         long[] keys = new long[len];
         long[] nonKeys = new long[len];
         // first half is keys, second half is non-keys
@@ -204,13 +215,13 @@ if (f.cardinality() != 0) {
             assertEquals(f.toString(), 0, f.cardinality());
         }
         if (log) {
-            System.out.println(type + " fpp: " + fpp +
-                    " size: " + len +
-                    " bits/key: " + bitsPerKey +
-                    " add ns/key: " + nanosPerAdd +
-                    " lookup 0% ns/key: " + nanosPerLookupNoneInSet +
-                    " lookup 100% ns/key: " + nanosPerLookupAllInSet +
-                    (nanosPerRemove < 0 ? "" : (" remove ns/key: " + nanosPerRemove)));
+            System.out.println(" fpp: " + fpp +
+                  // " size: " + len +
+                  // " bits/key: " + bitsPerKey +
+                  // " add ns/key: " + nanosPerAdd +
+                   " lookup 0% ns/key: " + nanosPerLookupNoneInSet +
+                   " lookup 100% ns/key: " + nanosPerLookupAllInSet +
+                   (nanosPerRemove < 0 ? "" : (" remove ns/key: " + nanosPerRemove)));
         }
     }
 

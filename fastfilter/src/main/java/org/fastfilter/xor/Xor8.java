@@ -16,7 +16,7 @@ import org.fastfilter.utils.Hash;
  */
 public class Xor8 implements Filter {
 
-    private static final int BITS_PER_FINGERPRINT = 8;
+    private static final int BITS_PER_FINGERPRINT = 7;
     private static final int HASHES = 3;
     private static final int FACTOR_TIMES_100 = 123;
     private final int size;
@@ -143,7 +143,7 @@ public class Xor8 implements Filter {
         int h1 = Hash.reduce(r1, blockLength) + blockLength;
         int h2 = Hash.reduce(r2, blockLength) + 2 * blockLength;
         f ^= fingerprints[h0] ^ fingerprints[h1] ^ fingerprints[h2];
-        return (f & 0xff) == 0;
+        return (f & 0x7f) == 0;
     }
 
     private int getHash(long key, long seed, int index) {

@@ -12,7 +12,7 @@ import org.fastfilter.utils.Hash;
  * [1] paper: Simple and Space-Efficient Minimal Perfect Hash Functions -
  * http://cmph.sourceforge.net/papers/wads07.pdf
  */
-public class Xor16 implements Filter {
+public class Xor15Bloom implements Filter {
 
     private static final int BITS_PER_FINGERPRINT = 15;
     private static final int HASHES = 3;
@@ -30,14 +30,14 @@ public class Xor16 implements Filter {
         return (int) (HASHES + (long) FACTOR_TIMES_100 * size / 100);
     }
 
-    public static Xor16 construct(long[] keys) {
-        return new Xor16(keys);
+    public static Xor15Bloom construct(long[] keys, long[] keysBloom) {
+        return new Xor15Bloom(keys, keysBloom);
     }
 
-    public Xor16(long[] keys) {
+    public Xor15Bloom(long[] keys, long[] keysBloom) {
         int size = keys.length;
         int arrayLength = getArrayLength(size);
-        bitCount = arrayLength * BITS_PER_FINGERPRINT;
+        bitCount = arrayLength * BITS_PER_FINGERPRINT+1;
         blockLength = arrayLength / HASHES;
         long[] reverseOrder = new long[size];
         byte[] reverseH = new byte[size];
@@ -113,20 +113,32 @@ public class Xor16 implements Filter {
         }
         fingerprints = new short[arrayLength];
         System.arraycopy(fp, 0, fingerprints, 0, fp.length);
+        for(long x : keysBloom) {
+            add(x);
+        }
     }
 
     @Override
     public boolean mayContain(long key) {
         long hash = Hash.hash64(key, seed);
         int f = fingerprint(hash);
+        int b;
         int r0 = (int) hash;
         int r1 = (int) Long.rotateLeft(hash, 21);
         int r2 = (int) Long.rotateLeft(hash, 42);
         int h0 = Hash.reduce(r0, blockLength);
         int h1 = Hash.reduce(r1, blockLength) + blockLength;
         int h2 = Hash.reduce(r2, blockLength) + 2 * blockLength;
-        f ^= fingerprints[h0] ^ fingerprints[h1] ^ fingerprints[h2];
-        return (f & 0xffff) == 0;
+        int h0f =fingerprints[h0];
+        int h1f =fingerprints[h1];
+        int h2f =fingerprints[h2];
+        //f ^= fingerprints[h0] ^ fingerprints[h1] ^ fingerprints[h2];
+        // Xor filter verification making cero the content of the Bloom filter
+        f ^= (h0f ^ h1f^ h2f );
+        b = (h0f &  h1f & h2f ); 
+        return ( (  (f & 0x7fff) ) == 0   || (b & 0x8000)== 0x8000 );
+        
+        //return (f & 0xffff) == 0;
     }
 
     private int getHash(long key, long seed, int index) {
@@ -138,6 +150,24 @@ public class Xor16 implements Filter {
 
     private int fingerprint(long hash) {
         return (int) (hash & ((1 << BITS_PER_FINGERPRINT) - 1));
+    }
+
+    // Add keys on the Bloom Filter after complete the insertions on the Xor Filter
+
+    @Override
+    public void add(long key) {
+        
+            long hash = Hash.hash64(key, seed);
+            int r0 = (int) hash;
+            int r1 = (int) Long.rotateLeft(hash, 21);
+            int r2 = (int) Long.rotateLeft(hash, 42);
+            int h0 = Hash.reduce(r0, blockLength);
+            int h1 = Hash.reduce(r1, blockLength) + blockLength;
+            int h2 = Hash.reduce(r2, blockLength) + 2 * blockLength;
+            fingerprints[h0] |= 0x8000; //Making OR with 1 at the hash position 
+            fingerprints[h1] |= 0x8000;
+            fingerprints[h2] |= 0x8000; 
+     
     }
 
 }

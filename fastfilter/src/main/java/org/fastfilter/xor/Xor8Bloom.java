@@ -158,10 +158,18 @@ public class Xor8Bloom implements Filter {
         int h1f =fingerprints[h1];
         int h2f =fingerprints[h2];
         // Xor filter verification making cero the content of the Bloom filter
-        f ^= (h0f & 0x7F )^ (h1f & 0x7F )^ (h2f & 0x7F);
+        f ^= (h0f^ h1f^ h2f);
+
         // Bloom filter verifiation shifting 7 bits to the right
-        b = ( (h0f & 0xFF) >>> 7)& ( (h1f & 0xFF) >>> 7 )& ((h2f & 0xFF) >>> 7); 
-        return ( (  (f & 0xff) ) == 0   || b == 1 );
+        //b = ( (h0f & 0xff) >>> 7)& ( (h1f & 0xff) >>> 7 )& ((h2f & 0xff) >>> 7); 
+        //return ( (  (f & 0xff) ) == 0   || b == 1 );
+        //b = (h0f & h1f & h2f) >>> 7; 
+
+        b = (h0f & h1f & h2f); 
+        //b = b & 0x80; 
+        return ( (  (f & 0x7f) ) == 0   || (b & 0x80) == 0x80 );
+        //b = b & 0x1;
+        //return ( (  (f & 0xff) ) == 0   || b == 1 );
         // return (f & 0xff) == 0;
         //return ( b == 1 );
     }
@@ -204,8 +212,8 @@ public class Xor8Bloom implements Filter {
             int h2 = Hash.reduce(r2, blockLength) + 2 * blockLength;
             fingerprints[h0] |= 0x80; //Making OR with 1 at the hash position 
             fingerprints[h1] |= 0x80;
-            fingerprints[h2] |= 0x80; 
-     
+            fingerprints[h2] |= 0x80;
+        
     }
     
 
