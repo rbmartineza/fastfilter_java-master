@@ -142,7 +142,7 @@ public class TestAllFilters {
 
     @Test
     public void test() {
-        for (int size_i = 100_000_000; size_i <= 104_000_000; size_i += 500_000) {
+        for (int size_i = 10_000_000; size_i <= 10_140_000; size_i += 20_000) {
         testAll(size_i, true);
         }
     }
@@ -160,7 +160,7 @@ public class TestAllFilters {
 
     private static void test(TestFilterType type, int len, int seed, boolean log) {
         long[] list = new long[len * 2];
-        RandomGenerator.createRandomUniqueListFast(list, 10_000_000 + seed);
+        RandomGenerator.createRandomUniqueListFast(list, 100_000 + seed);
         long[] keys = new long[len];
         long[] nonKeys = new long[len];
         // first half is keys, second half is non-keys

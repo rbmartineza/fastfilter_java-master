@@ -146,8 +146,8 @@ public class TestXorBloom {
        // for (TestFilterType type : TestFilterType.values()) {
             //test(type, len, 0, log);
             //test(len,len, 0, log);
-            for (int size2 = 0; size2 <= 4_000_000; size2 += 500_000) {
-                int size1 =100_000_000; // Keys for the Xor filter
+            for (int size2 = 0; size2 <= 140_000; size2 += 20_000) {
+                int size1 =10_000_000; // Keys for the Xor filter
                 //int size2 = 500_000; // Keys for the Bloom filter
                 int size = size1 + size2;  // Total keys to insert
                 System.out.println("size " + size);
@@ -163,7 +163,7 @@ public class TestXorBloom {
     private static void test(int len1, int len2, int seed, boolean log) {
         int len = len1 + len2;
         long[] list = new long[len * 2];
-        RandomGenerator.createRandomUniqueListFast(list, len + seed);
+        RandomGenerator.createRandomUniqueListFast(list, 100 + seed);
         long[] keys = new long[len1]; // keys for XOR filter
         long[] keysBloom = new long[len2]; // keys for Bloom filter
         long[] keysAdded = new long[len]; // keys for Bloom filter
