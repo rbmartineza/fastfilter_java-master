@@ -3,6 +3,7 @@ package org.fastfilter;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 //import org.fastfilter.Filter;
 //import org.fastfilter.TestFilterType;
@@ -88,6 +89,9 @@ This could be, for a LSM tree:
  */
 
 public class TestXorBloom {
+	private static double lookup_0;
+	private static double lookup_100;
+	private static double fpp_final;
 
     public static void main(String... args) {
         Hash.setSeed(1);
@@ -139,31 +143,55 @@ public class TestXorBloom {
 
     @Test
     public void test() {
-        testAll(100000, true);
+        testAll(100000, false);
     }
 
     private static void testAll(int len, boolean log) {
        // for (TestFilterType type : TestFilterType.values()) {
             //test(type, len, 0, log);
             //test(len,len, 0, log);
-            for (int size2 = 0; size2 <= 140_000; size2 += 20_000) {
-                int size1 =10_000_000; // Keys for the Xor filter
+	int run = 2;
+	int size_test = 11;
+	double[] l0_array = new double [size_test];
+	double[] l100_array = new double [size_test];
+	double[] fpp_array = new double [size_test];
+	for (int run_i = 1; run_i <= run; run_i += 1){
+		System.out.println("Run: " + run_i);
+		int i = 0;
+            //for (int size2 = 0; size2 <= 1_000_000; size2 += 100_000) {
+            for (int size2 = 0; size2 <= 10_000_000; size2 += 1_000_000){
+		int size1 =100_000_000; // Keys for the Xor filter
                 //int size2 = 500_000; // Keys for the Bloom filter
                 int size = size1 + size2;  // Total keys to insert
-                System.out.println("size " + size);
+                //System.out.println("size " + size);
                 int test = 0;
                 test(size1,size2, test, log);
+		l0_array[i] = l0_array[i] + lookup_0;
+		l100_array[i] = l100_array[i] + lookup_100;
+		fpp_array[i] = fpp_array[i] + fpp_final;
                 //test2(TestFilterType.BLOOM, size2, test, true);
-                System.out.println();
+                //System.out.println();
+		i += 1;
             }
             
-       // }
+        }
+
+	for (int print = 0; print <= size_test-1; print +=1){
+		l0_array[print] = l0_array[print]/run;
+		l100_array[print] = l100_array[print]/run;
+		fpp_array[print] = fpp_array[print]/run;
+	
+	}
+	System.out.println(" lookup 0% ns/key: " + Arrays.toString(l0_array));
+	System.out.println(" lookup 100% ns/key: " + Arrays.toString(l100_array));
+	System.out.println(" fpp: " + Arrays.toString(fpp_array));
+	
     }
 
     private static void test(int len1, int len2, int seed, boolean log) {
         int len = len1 + len2;
         long[] list = new long[len * 2];
-        RandomGenerator.createRandomUniqueListFast(list, 100 + seed);
+        RandomGenerator.createRandomUniqueListFast(list, 100_000 + seed);
         long[] keys = new long[len1]; // keys for XOR filter
         long[] keysBloom = new long[len2]; // keys for Bloom filter
         long[] keysAdded = new long[len]; // keys for Bloom filter
@@ -183,7 +211,7 @@ public class TestXorBloom {
             keysAdded[i4] = list[i4];
         }
         long time = System.nanoTime();
-        Filter f = Xor15Bloom.construct(keys, keysBloom);
+        Filter f = Xor8Bloom.construct(keys, keysBloom);
         time = System.nanoTime() - time;
         double nanosPerAdd = time / len;
         time = System.nanoTime();
@@ -216,31 +244,34 @@ public class TestXorBloom {
         time = System.nanoTime() - time;
         double nanosPerLookupNoneInSet = time / 2 / len;
         double fpp = (double) falsePositives / len;
-        long bitCount = f.getBitCount();
-        double bitsPerKey = (double) bitCount / len;
-        double nanosPerRemove = -1;
-        if (f.supportsRemove()) {
-            time = System.nanoTime();
-            for (int i = 0; i < len; i++) {
-                f.remove(keys[i]);
-            }
-            time = System.nanoTime() - time;
-            nanosPerRemove = time / len;
+	long bitCount = f.getBitCount();
+	double bitsPerKey = (double) bitCount / len;
+	double nanosPerRemove= -1;
+	if (f.supportsRemove()) {
+        time = System.nanoTime();
+	for (int i =0; i< len ; i++) {
+		f.remove(keys[i]);
+	}	
+        time = System.nanoTime() - time;
+	nanosPerRemove = time /len;
 if (f.cardinality() != 0) {
-    System.out.println(f.cardinality());
+	System.out.println(f.cardinality());
 }
-            assertEquals(f.toString(), 0, f.cardinality());
-        }
-        if (log) {
-            System.out.println("Xor8Bloom" + " fpp: " + fpp +
-                   // " False positive count: " + falsePositives +
-                   // " size: " + len +
-                   // " bits/key: " + bitsPerKey +
-                   // " add ns/key: " + nanosPerAdd +
-                    " lookup_0%_ns/key: " + nanosPerLookupNoneInSet +
-                    " lookup_100%_ns/key: " + nanosPerLookupAllInSet +
-                    (nanosPerRemove < 0 ? "" : (" remove ns/key: " + nanosPerRemove)));
-        }
-    }
 
+	assertEquals(f.toString(), 0, f.cardinality());
+	}
+	lookup_0 = nanosPerLookupNoneInSet;
+	lookup_100 = nanosPerLookupAllInSet;
+	fpp_final = fpp;
+	if (log) {
+		System.out.println("Xor8Bloom" + " fpp: " + fpp +
+		//
+		//
+		//
+		" lookup_0%_ns/key: " + nanosPerLookupNoneInSet +
+		" lookup_100%_ns/key: " + nanosPerLookupAllInSet +
+		(nanosPerRemove < 0 ? "" : (" remove ns/key: " + nanosPerRemove)));
+	}
+	}
 }
+

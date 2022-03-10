@@ -2,6 +2,8 @@ package org.fastfilter;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Arrays;
+
 import org.fastfilter.Filter;
 import org.fastfilter.TestFilterType;
 import org.fastfilter.utils.Hash;
@@ -68,6 +70,7 @@ To decide which type to use, the average time can be estimated as follows:
 
 * filterFpp: false positive rate of the filter (0.01 for 1%)
 * applicationFpp: false positive rate of the application (how often does the application perform a lookup if the entry doesn't exist)
+
 * filterLookupTime: average time needed by the filter to perform a lookup
 * falsePositiveTime: average time needed in case of a false positive, in nanoseconds
 
@@ -84,6 +87,10 @@ This could be, for a LSM tree:
  */
 
 public class TestAllFilters {
+
+ private static double lookup_0;
+ private static double lookup_100;
+ private static double fpp_final;
 
     public static void main(String... args) {
         Hash.setSeed(1);
@@ -142,14 +149,37 @@ public class TestAllFilters {
 
     @Test
     public void test() {
-        for (int size_i = 10_000_000; size_i <= 10_140_000; size_i += 20_000) {
-        testAll(size_i, true);
+	int run = 2;
+	int size_test = 11;
+	double [] l0_array = new double[size_test];
+	double [] l100_array = new double[size_test];
+	double [] fpp_array = new double[size_test];
+	for (int run_i = 1; run_i <= run; run_i +=1){
+		System.out.println("Run: " + run_i);
+		int i = 0;
+ 		//for (int size_i = 10_000_000; size_i <= 11_000_000; size_i += 100_000) {
+		for(int size_i = 100_000_000; size_i <= 110_000_000; size_i += 1_000_000){
+       		testAll(size_i, false);
+		l0_array[i] = l0_array[i] + lookup_0;
+		l100_array[i] = l100_array[i] + lookup_100;
+		fpp_array[i] = fpp_array[i] + fpp_final;
+		i +=1;
+		}
         }
+	for (int print = 0; print <= size_test-1; print += 1) {
+	l0_array[print] = l0_array[print]/run;
+	l100_array[print] = l100_array[print]/run;
+	fpp_array[print] = fpp_array[print]/run;
+	}
+	System.out.println("lookup 0% ns/ key: " + Arrays.toString(l0_array));
+	System.out.println("lookup 100% ns/ key: " + Arrays.toString(l100_array));	
+	System.out.println("fpp " + Arrays.toString(fpp_array));
     }
 
     private static void testAll(int len, boolean log) {
-       TestFilterType type = TestFilterType.XOR_16;
-       System.out.println("size " + len);
+       TestFilterType type = TestFilterType.XOR_8;
+       //TestFilterType type = TestFilterType.XOR_16;
+       //System.out.println("size " + len);
             test(type, len, 0, log);
             //test(TestFilterType.XOR_8, len, 0, log);
         
@@ -214,6 +244,9 @@ if (f.cardinality() != 0) {
 }
             assertEquals(f.toString(), 0, f.cardinality());
         }
+	lookup_0 = nanosPerLookupNoneInSet;
+	lookup_100 = nanosPerLookupAllInSet;
+	fpp_final = fpp;
         if (log) {
             System.out.println(" fpp: " + fpp +
                   // " size: " + len +
