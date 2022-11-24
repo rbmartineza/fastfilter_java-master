@@ -150,7 +150,7 @@ public class TestXorBloom {
        // for (TestFilterType type : TestFilterType.values()) {
             //test(type, len, 0, log);
             //test(len,len, 0, log);
-	int run = 2;
+	int run = 4;
 	int size_test = 11;
 	double[] l0_array = new double [size_test];
 	double[] l100_array = new double [size_test];
@@ -158,9 +158,10 @@ public class TestXorBloom {
 	for (int run_i = 1; run_i <= run; run_i += 1){
 		System.out.println("Run: " + run_i);
 		int i = 0;
-            //for (int size2 = 0; size2 <= 1_000_000; size2 += 100_000) {
-            for (int size2 = 0; size2 <= 10_000_000; size2 += 1_000_000){
-		int size1 =100_000_000; // Keys for the Xor filter
+        int size1 =100_000_000; // Keys for the Xor filter
+            for (int size2 = 0; size2 <= 10_000_000; size2 += 1_000_000) {
+            //for (int size2 = 0; size2 <= 10_000_000; size2 += 1_000_000){
+		        
                 //int size2 = 500_000; // Keys for the Bloom filter
                 int size = size1 + size2;  // Total keys to insert
                 //System.out.println("size " + size);

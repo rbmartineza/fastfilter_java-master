@@ -14,7 +14,7 @@ import org.fastfilter.utils.Hash;
  * [1] paper: Simple and Space-Efficient Minimal Perfect Hash Functions -
  * http://cmph.sourceforge.net/papers/wads07.pdf
  */
-public class Xor8Bloom implements Filter {
+public class Xor8BloomSerial implements Filter {
 
     private static final int BITS_PER_FINGERPRINT = 7;
     private static final int HASHES = 3;
@@ -24,6 +24,7 @@ public class Xor8Bloom implements Filter {
     private final int blockLength;
     private long seed;
     private byte[] fingerprints;
+    private byte[] fingerprintsBloom;
     // private byte[] bloom;
     private final int bitCount;
 
@@ -35,11 +36,11 @@ public class Xor8Bloom implements Filter {
         return (int) (HASHES + (long) FACTOR_TIMES_100 * size / 100);
     }
 
-    public static Xor8Bloom construct(long[] keys, long[] keysBloom) {
-        return new Xor8Bloom(keys, keysBloom);
+    public static Xor8BloomSerial construct(long[] keys, long[] keysBloom) {
+        return new Xor8BloomSerial(keys, keysBloom);
     }
 
-    public Xor8Bloom(long[] keys, long[] keysBloom) {
+    public Xor8BloomSerial(long[] keys, long[] keysBloom) {
         
         this.size = keys.length;
         arrayLength = getArrayLength(size);
@@ -50,6 +51,7 @@ public class Xor8Bloom implements Filter {
         byte[] reverseH = new byte[size];
         int reverseOrderPos;
         long seed;
+
         do {
             seed = Hash.randomSeed();
             byte[] t2count = new byte[m];
@@ -131,7 +133,14 @@ public class Xor8Bloom implements Filter {
             fp[change] = (byte) xor;
         }
         fingerprints = new byte[m];
+        fingerprintsBloom = new byte[m];
         System.arraycopy(fp, 0, fingerprints, 0, fp.length);
+        
+        //Empty the most significative bit of the fingerprints matrix
+        for (int i = 0; i < arrayLength; i++) {
+            fingerprintsBloom[i] &= 0x7f;
+        }
+        
         //bloom = new byte[m];
         
         for(long x : keysBloom) {
@@ -165,15 +174,15 @@ public class Xor8Bloom implements Filter {
         //return ( (  (f & 0xff) ) == 0   || b == 1 );
         //b = (h0f & h1f & h2f) >>> 7; 
         
-        // if((f & 0x7f) == 0){
-        //     return (f & 0x7f) == 0;
-        // }
-        // int h3f =fingerprints[h0];
-        // int h4f =fingerprints[h1];
-        // int h5f =fingerprints[h2];
-        // b = (h3f & h4f & h5f);
+         if((f & 0x7f) == 0){
+             return (f & 0x7f) == 0;
+         }
+         int h3f =fingerprintsBloom[h0];
+         int h4f =fingerprintsBloom[h1];
+         int h5f =fingerprintsBloom[h2];
+         b = (h3f & h4f & h5f);
 
-        b = (h0f & h1f & h2f); 
+        //b = (h0f & h1f & h2f); 
         //b = b & 0x80; 
         return ( (  (f & 0x7f) ) == 0   || (b & 0x80) == 0x80 );
         //b = b & 0x1;
@@ -218,14 +227,14 @@ public class Xor8Bloom implements Filter {
             int h0 = Hash.reduce(r0, blockLength);
             int h1 = Hash.reduce(r1, blockLength) + blockLength;
             int h2 = Hash.reduce(r2, blockLength) + 2 * blockLength;
-            fingerprints[h0] |= 0x80; //Making OR with 1 at the hash position 
-            fingerprints[h1] |= 0x80;
-            fingerprints[h2] |= 0x80;
+            fingerprintsBloom[h0] |= 0x80; //Making OR with 1 at the hash position 
+            fingerprintsBloom[h1] |= 0x80;
+            fingerprintsBloom[h2] |= 0x80;
         
     }
     
 
-    public Xor8Bloom(InputStream in) {
+    public Xor8BloomSerial(InputStream in) {
         try {
             DataInputStream din = new DataInputStream(in);
             size = din.readInt();

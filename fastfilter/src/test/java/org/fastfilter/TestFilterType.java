@@ -15,6 +15,8 @@ import org.fastfilter.xor.Xor16;
 import org.fastfilter.xor.Xor8;
 //import org.fastfilter.xor.Xor8Bloom;
 import org.fastfilter.xor.XorBinaryFuse8;
+import org.fastfilter.xor.XorBinaryFuse8Bloom;
+import org.fastfilter.xor.XorBinaryFuse8BloomSerial;
 import org.fastfilter.xor.XorSimple;
 import org.fastfilter.xor.XorSimple2;
 import org.fastfilter.xorplus.XorPlus8;
@@ -110,6 +112,18 @@ public enum TestFilterType {
         @Override
         public Filter construct(long[] keys, int setting) {
             return XorBinaryFuse8.construct(keys);
+        }
+    },
+    XOR_BINARY_FUSE_8_BLOOM {
+        @Override
+        public Filter construct(long[] keys, int setting) {
+            return XorBinaryFuse8Bloom.construct(keys);
+        }
+    },
+    XOR_BINARY_FUSE_8_BLOOM_SERIAL {
+        @Override
+        public Filter construct(long[] keys, int setting) {
+            return XorBinaryFuse8BloomSerial.construct(keys);
         }
     },
     CUCKOO_8 {

@@ -4,7 +4,13 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-
+        {
+            "type": "java",
+            "name": "Launch TestBinaryFuse",
+            "request": "launch",
+            "mainClass": "org.fastfilter.TestBinaryFuse",
+            "projectName": "fastfilter"
+        },
         {
             "type": "java",
             "name": "Launch TestXorBloom15",

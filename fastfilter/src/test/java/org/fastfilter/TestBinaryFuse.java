@@ -86,7 +86,7 @@ This could be, for a LSM tree:
 
  */
 
-public class TestAllFilters {
+public class TestBinaryFuse {
 
  private static double lookup_0;
  private static double lookup_100;
@@ -179,7 +179,7 @@ public class TestAllFilters {
     }
 
     private static void testAll(int len, boolean log) {
-       TestFilterType type = TestFilterType.XOR_8;
+       TestFilterType type = TestFilterType.XOR_BINARY_FUSE_8;
        //TestFilterType type = TestFilterType.XOR_16;
        //System.out.println("size " + len);
             test(type, len, 0, log);

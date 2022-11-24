@@ -8,7 +8,7 @@ import org.fastfilter.utils.Hash;
 /**
  * The xor binary fuse filter, a new algorithm that can replace a Bloom filter.
  */
-public class XorBinaryFuse8 implements Filter {
+public class XorBinaryFuse8BloomSerial implements Filter {
 
     private static final int ARITY = 3;
 
@@ -18,9 +18,10 @@ public class XorBinaryFuse8 implements Filter {
     private final int segmentLengthMask;
     private final int arrayLength;
     private final byte[] fingerprints;
+    private final byte[] fingerprintsBloom;
     private long seed;
 
-    public XorBinaryFuse8(int segmentCount, int segmentLength) {
+    public XorBinaryFuse8BloomSerial(int segmentCount, int segmentLength) {
         if (segmentLength < 0 || Integer.bitCount(segmentLength) != 1) {
             throw new IllegalArgumentException("Segment length needs to be a power of 2, is " + segmentLength);
         }
@@ -33,6 +34,7 @@ public class XorBinaryFuse8 implements Filter {
         this.segmentCountLength = segmentCount * segmentLength;
         this.arrayLength = (segmentCount + ARITY - 1) * segmentLength;
         this.fingerprints = new byte[arrayLength];
+        this.fingerprintsBloom = new byte[arrayLength];
     }
 
     public long getBitCount() {
@@ -72,7 +74,7 @@ public class XorBinaryFuse8 implements Filter {
         return x;
     }
 
-    public static XorBinaryFuse8 construct(long[] keys) {
+    public static XorBinaryFuse8BloomSerial construct(long[] keys) {
         int size = keys.length;
         int segmentLength = calculateSegmentLength(ARITY, size);
         // the current implementation hardcodes a 18-bit limit to
@@ -86,7 +88,7 @@ public class XorBinaryFuse8 implements Filter {
         int arrayLength = (segmentCount + ARITY - 1) * segmentLength;
         segmentCount = (arrayLength + segmentLength - 1) / segmentLength;
         segmentCount = segmentCount <= ARITY - 1 ? 1 : segmentCount - (ARITY - 1);
-        XorBinaryFuse8 filter = new XorBinaryFuse8(segmentCount, segmentLength);
+        XorBinaryFuse8BloomSerial filter = new XorBinaryFuse8BloomSerial(segmentCount, segmentLength);
         filter.addAll(keys);
         return filter;
     }
@@ -229,21 +231,61 @@ public class XorBinaryFuse8 implements Filter {
             h012[3] = h012[0];
             h012[4] = h012[1];
             fingerprints[h012[found]] = (byte) (xor2 ^ fingerprints[h012[found + 1]] ^ fingerprints[h012[found + 2]]);
+            fingerprintsBloom[h012[found]] = (byte) (xor2 ^ fingerprintsBloom[h012[found + 1]] ^ fingerprintsBloom[h012[found + 2]]);
         }
+
+        //Empty the most significative bit of the fingerprints matrix
+        for (int i = 0; i < arrayLength; i++) {
+            fingerprintsBloom[i] &= 0x7f;
+        }
+
     }
 
+    // Add keys on the Bloom Filter after complete the insertions on the Xor Filter
+
     @Override
-    public boolean mayContain(long key) {
+    public void add(long key) {
+        
         long hash = Hash.hash64(key, seed);
-        byte f = fingerprint(hash);
         int h0 = Hash.reduce((int) (hash >>> 32), segmentCountLength);
         int h1 = h0 + segmentLength;
         int h2 = h1 + segmentLength;
         long hh = hash;
         h1 ^= (int) ((hh >> 18) & segmentLengthMask);
         h2 ^= (int) ((hh) & segmentLengthMask);
-        f ^= fingerprints[h0] ^ fingerprints[h1] ^ fingerprints[h2];
-        return (f & 0x7f) == 0;
+        fingerprintsBloom[h0] |= 0x80; //Making OR with 1 at the hash position 
+        fingerprintsBloom[h1] |= 0x80;
+        fingerprintsBloom[h2] |= 0x80;
+        
+    }
+
+    @Override
+    public boolean mayContain(long key) {
+        long hash = Hash.hash64(key, seed);
+        byte f = fingerprint(hash);
+        int b;
+        int h0 = Hash.reduce((int) (hash >>> 32), segmentCountLength);
+        int h1 = h0 + segmentLength;
+        int h2 = h1 + segmentLength;
+        long hh = hash;
+        h1 ^= (int) ((hh >> 18) & segmentLengthMask);
+        h2 ^= (int) ((hh) & segmentLengthMask);
+        int h0f =fingerprints[h0];
+        int h1f =fingerprints[h1];
+        int h2f =fingerprints[h2];
+        //f ^= fingerprints[h0] ^ fingerprints[h1] ^ fingerprints[h2];
+        //return (f & 0xff) == 0;
+        f ^= (h0f^ h1f^ h2f);
+         if ((f & 0x7f)  == 0 ){
+            return (f & 0x7f) == 0;
+        }
+         int h3f =fingerprintsBloom[h0];
+         int h4f =fingerprintsBloom[h1];
+         int h5f =fingerprintsBloom[h2];
+        b = (h3f & h4f & h5f);
+        
+        //b = (h0f & h1f & h2f);
+        return ( (  (f & 0x7f) ) == 0   || (b & 0x80) == 0x80 );
     }
 
     @Override
