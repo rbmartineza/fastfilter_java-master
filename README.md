@@ -1,5 +1,4 @@
-# Fast Approximate Membership Filters in Java
-
+# Supporting Dynamic Insertions in Xor and Binary Fuse Filters with the Integrated XOR/BIF-Bloom Filter
 [![Build Status](https://travis-ci.com/FastFilter/fastfilter_java.svg?branch=master)](https://travis-ci.com/FastFilter/fastfilter_java)
 
 The following filter types are currently implemented:
