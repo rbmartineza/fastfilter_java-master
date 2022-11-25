@@ -8,4 +8,4 @@ The code, written in java, is based on https://github.com/FastFilter/fastfilter_
 
 In the path fastfilter_java-master/fastfilter/src/main/java/org/fastfilter/xor/ added the files with the code for IXOR and IBIF as Xor8Bloom and XorBinaryFuse8Bloom as well as a naive, serial implementation of each one.
 
-In the path https://github.com/rbmartineza/fastfilter_java-master/tree/main/fastfilter/src/test/java/org/fastfilter, the tests for 100 million elements were added. 
+In the path fastfilter_java-master/tree/main/fastfilter/src/test/java/org/fastfilter, the tests for 100 million elements were added. 
