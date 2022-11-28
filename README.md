@@ -2,7 +2,7 @@
 
 The following repository contains the directories with the code used to get the results of the paper: 
 
-Roberto Martínez, Pedro Reviriego and David Larrabeiti "Supporting Dynamic Insertions in Xor and Binary Fuse Filters with the Integrated XOR/BIF-Bloom Filter"
+Roberto Martínez, Pedro Reviriego and David Larrabeiti "Supporting Dynamic Insertions in Xor and Binary Fuse Filters with the Integrated XOR/BIF-Bloom Filter" (under revision in IEEE TNSM)
 
 Both implementations use an auxiliary Bloom filter to allow dynamic insertions integrated into a Xor/Binary fuse filter.
 
