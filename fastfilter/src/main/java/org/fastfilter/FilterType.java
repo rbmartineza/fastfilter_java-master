@@ -93,13 +93,13 @@ public enum FilterType {
     CUCKOO_8 {
         @Override
         public Filter construct(long[] keys, int setting) {
-            return Cuckoo8.construct(keys);
+            return Cuckoo8.construct(keys,setting);
         }
     },
     CUCKOO_16 {
         @Override
         public Filter construct(long[] keys, int setting) {
-            return Cuckoo16.construct(keys);
+            return Cuckoo16.construct(keys,setting);
         }
     },
     CUCKOO_PLUS_8 {

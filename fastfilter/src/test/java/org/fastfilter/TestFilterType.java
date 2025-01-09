@@ -11,6 +11,7 @@ import org.fastfilter.cuckoo.CuckooPlus8;
 import org.fastfilter.gcs.GolombCompressedSet;
 import org.fastfilter.gcs.GolombCompressedSet2;
 import org.fastfilter.mphf.MPHFilter;
+import org.fastfilter.xor.Ibif16;
 import org.fastfilter.xor.Xor16;
 import org.fastfilter.xor.Xor8;
 //import org.fastfilter.xor.Xor8Bloom;
@@ -120,6 +121,12 @@ public enum TestFilterType {
             return XorBinaryFuse8Bloom.construct(keys);
         }
     },
+    XOR_BINARY_FUSE_16_BLOOM {
+        @Override
+        public Filter construct(long[] keys, int setting) {
+            return Ibif16.construct(keys);
+        }
+    },
     XOR_BINARY_FUSE_8_BLOOM_SERIAL {
         @Override
         public Filter construct(long[] keys, int setting) {
@@ -129,13 +136,13 @@ public enum TestFilterType {
     CUCKOO_8 {
         @Override
         public Filter construct(long[] keys, int setting) {
-            return Cuckoo8.construct(keys);
+            return Cuckoo8.construct(keys,setting);
         }
     },
     CUCKOO_16 {
         @Override
         public Filter construct(long[] keys, int setting) {
-            return Cuckoo16.construct(keys);
+            return Cuckoo16.construct(keys,setting);
         }
     },
     CUCKOO_PLUS_8 {

@@ -1,0 +1,74 @@
+[[1;34mINFO[m] Scanning for projects...
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m------------------< [0;36mio.github.fastfilter:fastfilter[0;1m >-------------------[m
+[[1;34mINFO[m] [1mBuilding fastfilter 1.0.3-SNAPSHOT[m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mfastfilter[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/boris/Projects/fastfilter_java-master/fastfilter/src/main/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.6.1:compile[m [1m(default-compile)[m @ [36mfastfilter[0;1m ---[m
+[[1;34mINFO[m] Nothing to compile - all classes are up to date
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36mfastfilter[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] skip non existing resourceDirectory /home/boris/Projects/fastfilter_java-master/fastfilter/src/test/resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.6.1:testCompile[m [1m(default-testCompile)[m @ [36mfastfilter[0;1m ---[m
+[[1;34mINFO[m] Nothing to compile - all classes are up to date
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-surefire-plugin:2.19.1:test[m [1m(default-test)[m @ [36mfastfilter[0;1m ---[m
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running org.fastfilter.TestXorBloomV4
+Alpha: 100
+ Run: 1
+ lookup 0% ns/key: [59.0]
+ lookup 100% ns/key: [86.0]
+ fpp: [0.00788]
+ 
+Alpha: 105
+ Run: 1
+ lookup 0% ns/key: [75.0]
+ lookup 100% ns/key: [104.0]
+ fpp: [0.0144]
+ 
+Alpha: 110
+ Run: 1
+ lookup 0% ns/key: [91.0]
+ lookup 100% ns/key: [121.0]
+ fpp: [0.019639999999999998]
+ 
+Alpha: 115
+ Run: 1
+ lookup 0% ns/key: [116.0]
+ lookup 100% ns/key: [136.0]
+ fpp: [0.024269999999999996]
+ 
+Alpha: 120
+ Run: 1
+ lookup 0% ns/key: [141.0]
+ lookup 100% ns/key: [151.0]
+ fpp: [0.029779999999999997]
+ 
+Alpha: 123
+ Run: 1
+ lookup 0% ns/key: [166.0]
+ lookup 100% ns/key: [165.0]
+ fpp: [0.034359999999999995]
+ 
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 213.237 sec - in org.fastfilter.TestXorBloomV4
+
+Results :
+
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] [1;32mBUILD SUCCESS[m
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] Total time:  03:36 min
+[[1;34mINFO[m] Finished at: 2023-09-05T15:00:20+02:00
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m

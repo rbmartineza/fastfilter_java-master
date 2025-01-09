@@ -16,7 +16,7 @@ import org.fastfilter.utils.Hash;
  */
 public class Xor8 implements Filter {
 
-    private static final int BITS_PER_FINGERPRINT = 7;
+    private static final int BITS_PER_FINGERPRINT = 8;
     private static final int HASHES = 3;
     private static final int FACTOR_TIMES_100 = 123;
     private final int size;
@@ -48,6 +48,7 @@ public class Xor8 implements Filter {
         byte[] reverseH = new byte[size];
         int reverseOrderPos;
         long seed;
+        int err = 0; 
         do {
             seed = Hash.randomSeed();
             byte[] t2count = new byte[m];
@@ -55,6 +56,7 @@ public class Xor8 implements Filter {
             for (long k : keys) {
                 for (int hi = 0; hi < HASHES; hi++) {
                     int h = getHash(k, seed, hi);
+                    
                     t2[h] ^= k;
                     if (t2count[h] > 120) {
                         // probably something wrong with the hash function
@@ -109,6 +111,12 @@ public class Xor8 implements Filter {
                 reverseH[reverseOrderPos] = (byte) found;
                 reverseOrderPos++;
             }
+            err++;
+            if (err > 1000) {
+                // Still changing the seed
+                System.out.println("THE CONSTRUCTION IS TAKING MANY TRIES TO CONVERGE, CYCLES: " + err);
+                throw new IllegalArgumentException();
+            }
         } while (reverseOrderPos != size);
         this.seed = seed;
         byte[] fp = new byte[m];
@@ -143,7 +151,7 @@ public class Xor8 implements Filter {
         int h1 = Hash.reduce(r1, blockLength) + blockLength;
         int h2 = Hash.reduce(r2, blockLength) + 2 * blockLength;
         f ^= fingerprints[h0] ^ fingerprints[h1] ^ fingerprints[h2];
-        return (f & 0x7f) == 0;
+        return (f & 0xff) == 0;
     }
 
     private int getHash(long key, long seed, int index) {

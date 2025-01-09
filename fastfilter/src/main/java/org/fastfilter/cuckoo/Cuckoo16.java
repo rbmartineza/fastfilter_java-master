@@ -22,11 +22,13 @@ public class Cuckoo16 implements Filter {
     private final int bucketCount;
     private final Random random = new Random(1);
 
-    public static Cuckoo16 construct(long[] keys) {
+    public static Cuckoo16 construct(long[] keys, int occupancy) {
         int len = keys.length;
+        double occ_percent = (double) occupancy/100;
         while (true) {
             try {
-                Cuckoo16 f = new Cuckoo16((int) (len / 0.95));
+                //Cuckoo16 f = new Cuckoo16((int) (len / occ_percent));
+                Cuckoo16 f = new Cuckoo16((int) (110_000));
                 for (long k : keys) {
                     f.insert(k);
                 }

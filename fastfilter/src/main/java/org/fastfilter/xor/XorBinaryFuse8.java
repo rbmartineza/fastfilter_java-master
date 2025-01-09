@@ -62,6 +62,7 @@ public class XorBinaryFuse8 implements Filter {
             // not supported
             sizeFactor = 2.0;
         }
+        
         return sizeFactor;
     }
 
@@ -88,6 +89,7 @@ public class XorBinaryFuse8 implements Filter {
         segmentCount = segmentCount <= ARITY - 1 ? 1 : segmentCount - (ARITY - 1);
         XorBinaryFuse8 filter = new XorBinaryFuse8(segmentCount, segmentLength);
         filter.addAll(keys);
+        System.out.println("Segment length: " + sizeFactor + " capacity: " + capacity);
         return filter;
     }
 
@@ -230,6 +232,8 @@ public class XorBinaryFuse8 implements Filter {
             h012[4] = h012[1];
             fingerprints[h012[found]] = (byte) (xor2 ^ fingerprints[h012[found + 1]] ^ fingerprints[h012[found + 2]]);
         }
+        System.out.println("SegmentcountLength: " + segmentCountLength + " SegmentLength: " + segmentLength);
+        System.out.println("segmentLengthMask: " + segmentLengthMask + " segmentCount: " + segmentCount);
     }
 
     @Override

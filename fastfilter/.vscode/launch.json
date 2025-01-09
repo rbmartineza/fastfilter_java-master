@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "TestXorHTH1",
+            "request": "launch",
+            "mainClass": "org.fastfilter.TestXorHTH1",
+            "projectName": "fastfilter"
+        },
+        {
+            "type": "java",
             "name": "Launch TestBinaryFuse",
             "request": "launch",
             "mainClass": "org.fastfilter.TestBinaryFuse",

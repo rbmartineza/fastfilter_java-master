@@ -149,16 +149,16 @@ public class TestAllFilters {
 
     @Test
     public void test() {
-	int run = 4;
-	int size_test = 11;
+	int run = 100;
+	int size_test = 1;
 	double [] l0_array = new double[size_test];
 	double [] l100_array = new double[size_test];
 	double [] fpp_array = new double[size_test];
 	for (int run_i = 1; run_i <= run; run_i +=1){
-		System.out.println("Run: " + run_i);
+		// System.out.println("Run: " + run_i);
 		int i = 0;
  		//for (int size_i = 10_000_000; size_i <= 11_000_000; size_i += 100_000) {
-		for(int size_i = 100_000_000; size_i <= 110_000_000; size_i += 1_000_000){
+		for(int size_i = 1_111_170; size_i <= 1_111_170; size_i += 1_000_000){
        		testAll(size_i, false);
 		l0_array[i] = l0_array[i] + lookup_0;
 		l100_array[i] = l100_array[i] + lookup_100;
@@ -171,11 +171,10 @@ public class TestAllFilters {
 	l100_array[print] = l100_array[print]/run;
 	fpp_array[print] = fpp_array[print]/run;
 	}
+    System.out.println("runs:" + run);
 	System.out.println("lookup 0% ns/ key: " + Arrays.toString(l0_array));
 	System.out.println("lookup 100% ns/ key: " + Arrays.toString(l100_array));	
 	System.out.println("fpp " + Arrays.toString(fpp_array));
-
-
     }
 
     private static void testAll(int len, boolean log) {
@@ -192,7 +191,7 @@ public class TestAllFilters {
 
     private static void test(TestFilterType type, int len, int seed, boolean log) {
         long[] list = new long[len * 2];
-        RandomGenerator.createRandomUniqueListFast(list, 100_000 + seed);
+        RandomGenerator.createRandomUniqueListFast(list, 100 + seed);
         long[] keys = new long[len];
         long[] nonKeys = new long[len];
         // first half is keys, second half is non-keys

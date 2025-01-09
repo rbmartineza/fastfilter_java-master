@@ -149,8 +149,8 @@ public class TestBinaryFuse {
 
     @Test
     public void test() {
-	int run = 4;
-	int size_test = 11;
+	int run = 1;
+	int size_test = 1;
 	double [] l0_array = new double[size_test];
 	double [] l100_array = new double[size_test];
 	double [] fpp_array = new double[size_test];
@@ -158,8 +158,9 @@ public class TestBinaryFuse {
 		System.out.println("Run: " + run_i);
 		int i = 0;
  		//for (int size_i = 10_000_000; size_i <= 11_000_000; size_i += 100_000) {
-		for(int size_i = 100_000_000; size_i <= 110_000_000; size_i += 1_000_000){
-       		testAll(size_i, false);
+		//for(int size_i = 100_000_000; size_i <= 110_000_000; size_i += 1_000_000){
+        for(int size_i = 100; size_i <= 100; size_i += 1){
+            testAll(size_i, false);
 		l0_array[i] = l0_array[i] + lookup_0;
 		l100_array[i] = l100_array[i] + lookup_100;
 		fpp_array[i] = fpp_array[i] + fpp_final;

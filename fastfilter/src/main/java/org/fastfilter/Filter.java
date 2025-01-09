@@ -39,6 +39,51 @@ public interface Filter {
     }
 
     /**
+     * Add a key in aux xor.
+     *
+     * @param key the key
+     */
+    default void aux(long [] key) {
+        throw new UnsupportedOperationException();
+    }
+
+   /**
+     * To calculate the frequency of a key.
+     *
+     * @param key the key
+     */
+    default int frequency(long key) {
+        throw new UnsupportedOperationException();
+    }
+
+     /**
+     * To resset the frequency counter.
+     *
+     * @param key the key
+     */
+    default void resetCms(long[] key) {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * To return the number of memory access.
+     *
+     * @return number of memory access
+     */
+    default int getMemAccess() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * To return the number of memory access.
+     *
+     * @return number of memory access
+     */
+    default void resetMemAccess() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
      * Whether the remove operation is supported.
      *
      * @return true if yes
